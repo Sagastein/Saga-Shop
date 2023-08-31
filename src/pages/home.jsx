@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
-import { BiChevronsRight, BiChevronsLeft } from "react-icons/bi";
+import { BiChevronsRight, BiChevronsLeft, BiSearch } from "react-icons/bi";
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 function Home() {
@@ -25,7 +25,6 @@ function Home() {
     "lighting",
   ];
 
-  // Create URLs for different fetch scenarios
   const allProductsUrl = `https://dummyjson.com/products?skip=${
     (currentPage - 1) * itemsPerPage
   }&limit=${itemsPerPage}`;
@@ -59,16 +58,38 @@ function Home() {
   const handlePagination = (page) => {
     setCurrentPage(page);
   };
+  function SkeletonLoading() {
+    return (
+      <div className="w-full">
+        <div className="grid w-11/12 gap-12 mx-auto my-12 md:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
+            <div key={index} className="w-full border shadow-md animate-pulse">
+              <div className="h-40 bg-gray-200"></div>
+              <div className="bg-white p-4">
+                <div className="h-4 bg-gray-200 mb-2"></div>
+                <div className="h-4 bg-gray-200"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
-      <input
-        type="text"
-        className="my-4 border p-1 rounded-md w-10/12 mx-auto"
-        placeholder="Search products..."
-        value={searchQuery}
-        onChange={(e) => handleSearch(e.target.value)}
-      />
+      <div className="flex rounded-lg shadow w-5/12 border items-center mx-6 my-2">
+        <input
+          type="search"
+          className="bg-purple-white outline-none  flex-1  rounded-lg border-0 p-3"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+        <div className="text-purple-lighter">
+          <BiSearch className="text-3xl" />
+        </div>
+      </div>
 
       <div className="flex overflow-x-auto space-x-2 p-2">
         <button
@@ -93,7 +114,7 @@ function Home() {
       </div>
 
       {isValidating ? (
-        <div className="h-screen text-center">Loading...</div>
+        <SkeletonLoading />
       ) : (
         <main className="grid w-11/12 gap-4 mx-auto my-12 md:grid-cols-2 lg:grid-cols-4">
           {products.map((item) => (
