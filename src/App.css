@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.category-button {
+  padding: 5px 1rem;
+  border-radius: 20px;
+  text-transform: capitalize;
+  background-color: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.category-button.active {
+  background-color: #6b46c1;
+  color: white;
+}
+
+.category-button:hover {
+  background-color: #d1d1d1;
+}
+
+/* For pagination buttons */
+.pagination-button {
+  padding: 0.5rem 1rem;
+  background-color: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 10px;
+}
+
+.pagination-button.disabled {
+  background-color: #888888;
+  cursor: not-allowed;
+  border-radius: 10px;
+  scale: 0.9;
+}
+
+.pagination-button:hover {
+  background-color: #d1d1d1;
+}
