@@ -3,6 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useSWR from "swr";
+import { useCart } from "../hooks/CartContext";
+import CartPage from "../components/CartView";
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 function Image(props) {
   // Return an image element with the source and alt attributes
@@ -19,20 +21,35 @@ function Detail() {
   let { id } = useParams();
   const [count, setCount] = useState(1);
   const navigate = useNavigate();
-  const { data, isLoading } = useSWR(
+  const { cartItems, cartCount, addToCart } = useCart();
+  const { data, isLoading, error } = useSWR(
     `https://dummyjson.com/products/${id}`,
     fetcher
   );
   if (isLoading) return <div> loading ....</div>;
-  console.log(data);
+  if (error) console.error(error.response.data.message);
+  if (error)  navigate("/")
 
+  console.log(cartItems);
+  console.log(cartCount);
+  const handleDecrement = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const handleIncrement = () => {
+    if (count < data.stock) {
+      setCount(count + 1);
+    }
+  };
   return (
-    <main className="grid my-12 w-11/12 mx-auto grid-cols-2 gap-6">
+    <main className="grid my-12 w-11/12 mx-auto md:grid-cols-2 gap-6">
       <section className="border p-2 w-full">
         <img
           loading="lazy"
-          className="w-full h-[60vh]"
-          src={data.thumbnail}
+          className="md:w-full md:h-[60vh]"
+          src={data?.thumbnail}
           alt={data.title}
         />
         <div className="grid grid-flow-col gap-2 my-2">
@@ -63,27 +80,47 @@ function Detail() {
         <h1 className="mt-12 mb-4 capitalize">Items</h1>
         <div className="grid  grid-flow-col gap-3">
           <button
-            onClick={() => setCount(count - 1)}
+            onClick={handleDecrement}
             className="p-2 border rounded-full"
+            disabled={count === 1}
           >
             -
           </button>
           <input
             className="border rounded-full px-3"
+            onChange={(e) => setCount(e.target.value)}
             type="number"
             name="number"
             id="nummber"
+            max={data.stock}
             value={count}
           />
           <button
-            onClick={() => setCount(count + 1)}
-            className="p-2 border rounded-full"
+            onClick={handleIncrement}
+            className="p-2 border disabled:cursor-not-allowed rounded-full"
+            disabled={count === data.stock}
           >
             +
           </button>
         </div>
         <div className="grid mt-12 gap-x-6 grid-cols-2">
-          <button className="border p-2 px-4 text-xl font-bold capitalize bg-slate-800 text-white rounded-md">
+          <button
+            onClick={() => {
+              if (count <= data.stock) {
+                // Add the product to the cart
+                addToCart({
+                  id: data.id,
+                  title: data.title,
+                  price: data.price,
+                  quantity: count,
+                });
+                // Handle placing an order with the selected quantity
+                // You can add your logic here
+              }
+            }}
+            disabled={count <= 0 || count > data.stock}
+            className="border p-2 px-4 text-xl font-bold capitalize bg-slate-800 text-white rounded-md"
+          >
             place order
           </button>
           <button
@@ -94,6 +131,7 @@ function Detail() {
           </button>
         </div>
       </section>
+      <CartPage/>
     </main>
   );
 }
