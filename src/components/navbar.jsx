@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { BsCart4 } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useCart } from "../hooks/CartContext";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -9,7 +11,7 @@ const Navbar = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
+  const { cartCount } = useCart();
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
@@ -42,7 +44,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:block">
-          <ul className="md:flex">
+          <ul className="md:flex items-center">
             <motion.li
               whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.3 }}
@@ -63,14 +65,6 @@ const Navbar = () => {
                 About
               </Link>
             </li>
-            <li className="mx-4">
-              <Link
-                to=""
-                className="font-Fira cursor-pointer hover:text-gray-300"
-              >
-                Cart
-              </Link>
-            </li>
 
             <li className="mx-4">
               <Link
@@ -78,6 +72,26 @@ const Navbar = () => {
                 className="font-Fira cursor-pointer hover:text-gray-300"
               >
                 Contact
+              </Link>
+            </li>
+            <li className="mx-4">
+              <Link
+                to=""
+                className="font-Fira cursor-pointer hover:text-gray-300"
+              >
+                Login
+              </Link>
+            </li>
+            <li className="mx-4 border bg-slate-900 text-white px-2 py-1 rounded-md">
+              <Link
+                to=""
+                className="font-Fira cursor-pointer flex items-center hover:text-gray-300"
+              >
+                <BsCart4 className="mx-2" />
+                <span className="mx-1">Cart</span>
+                <strong className="mx-1 ring ring-inset ring-slate-600 h-5 w-5 text-sm text-center rounded-full">
+                  {cartCount && cartCount}
+                </strong>
               </Link>
             </li>
           </ul>
@@ -127,15 +141,6 @@ const Navbar = () => {
               About
             </Link>
           </li>
-          <li className="mx-4">
-            <Link
-              onClick={() => setIsMobileMenuOpen(false)}
-              to=""
-              className="block py-2 px-4 font-Fira hover:text-gray-300"
-            >
-              Cart
-            </Link>
-          </li>
 
           <li className="mx-4">
             <Link
@@ -146,6 +151,28 @@ const Navbar = () => {
               Contact
             </Link>
           </li>
+          <li className="mx-4">
+            <Link
+              onClick={() => setIsMobileMenuOpen(false)}
+              to=""
+              className="block py-2 px-4 font-Fira hover:text-gray-300"
+            >
+              Login
+            </Link>
+          </li>
+          <li className="mx-4 border bg-slate-900 text-white px-2 py-1 rounded-md">
+            <Link
+              to=""
+              className="font-Fira cursor-pointer flex items-center hover:text-gray-300"
+            >
+              <BsCart4 className="mx-2" />
+              <span className="mx-1">Cart</span>
+              <strong className="mx-1 ring ring-inset ring-slate-600 h-5 w-5 text-center rounded-full">
+                {cartCount && cartCount}
+              </strong>
+            </Link>
+          </li>
+
           {/* Other mobile menu items */}
         </ul>
       </div>
