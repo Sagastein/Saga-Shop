@@ -78,7 +78,7 @@ function Home() {
 
   return (
     <div className="w-full">
-      <div className="flex rounded-lg shadow w-5/12 border items-center mx-6 my-2">
+      <div className="flex rounded-lg shadow w-5/12 border items-center mx-12 my-2">
         <input
           type="search"
           className="bg-purple-white outline-none  flex-1  rounded-lg border-0 p-3"
@@ -91,7 +91,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="flex overflow-x-auto space-x-2 p-2">
+      <div className="flex w-11/12 mx-auto overflow-x-auto space-x-2 p-2">
         <button
           className={`category-button ${
             selectedCategory === "" ? "active" : ""
@@ -135,7 +135,7 @@ function Home() {
                 <div className="bg-white p-4">
                   <p>
                     <span>{item.title}</span> -
-                    <span className="p-1 ml-2 capitalize text-sm rounded bg-slate-800 text-white">
+                    <span className="p-1 ml-2 capitalize whitespace-nowrap text-sm rounded bg-slate-800 text-white">
                       {item.category}
                     </span>
                   </p>
