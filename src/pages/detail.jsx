@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import { useCart } from "../hooks/CartContext";
-import CartPage from "../components/CartView";
+
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 function Image(props) {
   // Return an image element with the source and alt attributes
@@ -28,7 +28,7 @@ function Detail() {
   );
   if (isLoading) return <div> loading ....</div>;
   if (error) console.error(error.response.data.message);
-  if (error)  navigate("/")
+  if (error) navigate("/");
 
   console.log(cartItems);
   console.log(cartCount);
@@ -121,7 +121,7 @@ function Detail() {
             disabled={count <= 0 || count > data.stock}
             className="border p-2 px-4 text-xl font-bold capitalize bg-slate-800 text-white rounded-md"
           >
-            place order
+            Add Cart
           </button>
           <button
             onClick={() => navigate(-1)}
@@ -131,7 +131,6 @@ function Detail() {
           </button>
         </div>
       </section>
-      <CartPage/>
     </main>
   );
 }
