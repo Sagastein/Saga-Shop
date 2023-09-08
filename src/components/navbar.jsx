@@ -4,13 +4,15 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { BsCart4 } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useCart } from "../hooks/CartContext";
+import { useCartVisibility } from "../hooks/useCartVisibility";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const { showCart } = useCartVisibility();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
   const { cartCount } = useCart();
   useEffect(() => {
     const handleScroll = () => {
@@ -82,9 +84,12 @@ const Navbar = () => {
                 Login
               </Link>
             </li>
-            <li className="mx-4 border bg-slate-900 text-white px-2 py-1 rounded-md">
-              <Link
-                to=""
+            <li
+              onClick={showCart}
+              className="mx-4 border bg-slate-900 text-white px-2 py-1 rounded-md"
+            >
+              <button
+                onClick={showCart}
                 className="font-Fira cursor-pointer flex items-center hover:text-gray-300"
               >
                 <BsCart4 className="mx-2" />
@@ -92,7 +97,7 @@ const Navbar = () => {
                 <strong className="mx-1 ring ring-inset ring-slate-600 h-5 w-5 text-sm text-center rounded-full">
                   {cartCount && cartCount}
                 </strong>
-              </Link>
+              </button>
             </li>
           </ul>
         </div>
@@ -121,7 +126,7 @@ const Navbar = () => {
             isMobileMenuOpen ? "flex flex-col" : "hidden"
           } md:hidden absolute top-14 right-0  w-full py-2 shadow-md rounded-md transition-all duration-300 ease-in-out ${
             isScrolled ? "bg-slate-900 text-white" : "bg-white"
-          }  z-50 transition-all duration-500 ease-in-out`}
+          }  z-20 transition-all duration-500 ease-in-out`}
         >
           <li className="mx-4">
             <Link
@@ -160,17 +165,20 @@ const Navbar = () => {
               Login
             </Link>
           </li>
-          <li className="mx-4 border bg-slate-900 text-white px-2 py-1 rounded-md">
-            <Link
-              to=""
+          <li
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="mx-4 border bg-slate-900 text-white px-2 py-1 rounded-md"
+          >
+            <button
+              onClick={showCart}
               className="font-Fira cursor-pointer flex items-center hover:text-gray-300"
             >
               <BsCart4 className="mx-2" />
               <span className="mx-1">Cart</span>
-              <strong className="mx-1 ring ring-inset ring-slate-600 h-5 w-5 text-center rounded-full">
+              <strong className="mx-1 ring ring-inset ring-slate-600 h-5 w-5 text-sm text-center rounded-full">
                 {cartCount && cartCount}
               </strong>
-            </Link>
+            </button>
           </li>
 
           {/* Other mobile menu items */}
